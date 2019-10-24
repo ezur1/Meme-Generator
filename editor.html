@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css?family=Amatic+SC:700|Fascinate+Inline|Staatliches&display=swap" rel="stylesheet">    <link rel="stylesheet" href="css/style.css">
+    <title>Meme-Editor</title>
+</head>
+
+<body onload="canvasInit()">
+    <header>
+        <section class="container header-wrapper flex align-center">
+            <div class="logo flex-1">
+                MeMe Generator
+            </div>
+            <nav id="mainMenu" class="main-menu-wrapper">
+                <ul class="main-menu clean-list flex align-center">
+                    <li>
+                        <a href="#" class="active">Galery</a>
+                    </li>
+                    <li>
+                        <a href="#" class="link-add-post">About</a>
+                    </li>
+                </ul>
+                <!-- <button class="toggle-menu-btn fa" onclick="toggleMenu()" alt="Open main menu"></button> -->
+                <div class="toggle-menu-screen screen" onclick="toggleMenu()" alt="toggle main menu"></div>
+            </nav>
+
+        </section>
+    </header>
+
+    <main>
+        <section class="editor-container container main-wrapper space-between flex">
+            <canvas id="canvas" width="550" height="550" onclick="getMousePos(event)"></canvas>
+            <div class="editor grid">
+                <input class="txt-input" type="text" name="memeTxt" oninput="onAddTxt(this.value)"
+                    placeholder="MeMe Text Here" />
+                <div class="txt-func flex space-between">
+                    <img src="icons/arrows.png" class="icon" onclick="switchBetweenTxts()">
+                    <img src="icons/add.png" class="icon" onclick="addTxtLine(this)">
+                    <img src="icons/trash.png" class="icon" onclick="onDeleteTxt()">
+                </div>
+                <div class="txt-editor flex space-around">
+                    <img src="icons/inc-font.png" class="icon plus" onclick="changeFontSize(this)">
+                    <img src="icons/dec-font.png" class="icon minus" onclick="changeFontSize(this)">
+                    <img src="icons/align-left.png" class="icon al" onclick="changeFontDir(this)">
+                    <img src="icons/align-center.png" class="icon ac" onclick="changeFontDir(this)">
+                    <img src="icons/align-right.png" class="icon ar" onclick="changeFontDir(this)">
+                </div>
+                <div class="txt-style flex space-around">
+                    <select name="impact">
+                        <option value="normal">Normal</option>
+                        <option value="bold">Bold</option>
+                        <option value="italic">Italic</option>
+                    </select>
+                    <label for="strokeColor"><img src="icons/text-stroke.png" class="icon"></label>
+                    <input type="color" id="strokeColor" onchange="changeStrokeColor(this)" style="display: none"/>
+                    <label for="fontColor"><img src="icons/txt-color.png" class="icon"></label>
+                    <input type="color" id="fontColor" onchange="changeFontColor(this)" style="display: none"/>
+                    
+                </div>
+            </div>
+        </section>
+        <section class="container main-wrapper flex space-between">
+            <div class="first-panel">
+                <div class="images images-wrapper grid">
+                </div>
+            </div>
+        </section>
+
+        <section class="pager main-pager container flex space-between">
+            <button class="post-nav prev" data-nav="-1">Previous</button>
+            <button class="post-nav next" data-nav="1">Next</button>
+        </section>
+
+    </main>
+
+    <script src="js/util.js"></script>
+    <script src="lib/jquery.min.js"></script>
+    <script src="js/meme-service.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>
