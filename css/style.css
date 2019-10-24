@@ -298,7 +298,7 @@ section .header-title {
 
 .editor {
     grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(6, 1fr);
+    grid-template-rows: repeat(4, 1fr);
     grid-gap: 1rem;
     text-align-last: center;
 }

@@ -5,11 +5,15 @@ let gCtx;
 let gIsSelected = false;
 
 function renderMemes() {
-    var images = getImages();
-    var strHTMLs = images.map(function (img) {
-        return `<img src="${img.url}" class="image-item" onclick="onImgClick(${img.id})">`;
-    });
-    $('div.images').html(strHTMLs.join(''));
+    let images = getImages();
+    let idxPage = getgCurrPageIdx();
+    let strHTMLs = '';
+    let i = (idxPage===0)?0:17;
+    let length =(idxPage===0)?16:images.length;
+    for (i ; i <length; i++) {
+        strHTMLs+=`<img src="${images[i].url}" class="image-item" onclick="onImgClick(${images[i].id})">`;
+    }
+    $('div.images').html(strHTMLs);
 }
 
 function onImgClick(idx) {
@@ -25,13 +29,10 @@ function setImgOnCanvas(idx) {
         renderCanvas();
     };
 }
-
 function onAddTxt(txt) {
     addTogMeme(txt);
     renderCanvas();
 }
-
-
 function renderCanvas() {
     let img = new Image();
     img.src = getImgUrl(getMemeImgIdx() - 1);
