@@ -76,8 +76,6 @@ function addTogMeme(txt, imgId) {
         }
         gMeme.txts.push(newLine);
     }
-    console.log(gMeme.txts[gMeme.selectedTxtIdx].line);
-    
     gMeme.txts[gMeme.selectedTxtIdx].line = txt;
     saveToStorage('gMeme', gMeme);
 }

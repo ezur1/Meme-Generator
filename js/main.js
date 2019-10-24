@@ -89,3 +89,7 @@ function renderCanvas() {
 function clearTxtInput() {
     $('.txt-input').val('');
 }
+function toggleMenu() {
+    var $elMainMenu = $('#mainMenu');
+    $elMainMenu.toggleClass('open');
+}
