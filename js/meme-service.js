@@ -72,10 +72,12 @@ function addTogMeme(txt, imgId) {
             align: 'center',
             color: 'white',
             stroke: 'black',
-            font: Impact
+            font: 'Impact'
         }
         gMeme.txts.push(newLine);
     }
+    console.log(gMeme.txts[gMeme.selectedTxtIdx].line);
+    
     gMeme.txts[gMeme.selectedTxtIdx].line = txt;
     saveToStorage('gMeme', gMeme);
 }
@@ -119,7 +121,8 @@ function addTxtLine(elBtn) {
         pos: (lineIdx === 1) ? 'bottom' : 'middle',
         size: 50,
         align: 'center',
-        color: 'white'
+        color: 'white',
+        font: 'Impact'
     }
     gMeme.txts.push(newLine);
     saveToStorage('gMeme', gMeme);
