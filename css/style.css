@@ -504,4 +504,7 @@ section .header-title {
     .images-wrapper{
         height: 30vh;
     }
+    a:visited {
+        color: white;
+    }
 }

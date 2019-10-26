@@ -4,6 +4,7 @@ let gImgs = [];
 var gCurrPageIdx = 0;
 let gMeme = loadFromStorage('gMeme');
 let isEditorPage = false;
+
 function init() {
     createImgs();
     renderMemes();
@@ -24,7 +25,7 @@ function init() {
         saveToStorage('gMeme', gMeme);
         saveToStorage('pageIdx', gCurrPageIdx);
     }
-    $('.post-nav').click(function(){
+    $('.post-nav').click(function () {
         setCurrPageDiff(+this.dataset.nav)
         renderMemes();
     });
@@ -36,11 +37,11 @@ function canvasInit() {
     gCanvas = $('#canvas')[0];
     gCtx = gCanvas.getContext('2d');
     setImgOnCanvas(gMeme.selectedImgId);
-    $('.post-nav').click(function(){
+    $('.post-nav').click(function () {
         setCurrPageDiff(+this.dataset.nav)
         renderMemes();
     });
-    isEditorPage=true;
+    isEditorPage = true;
 }
 
 function createImgs() {
@@ -55,14 +56,6 @@ function createImg(id) {
         url: `images/${id}.jpg`,
         keywords: []
     };
-}
-
-function getImages() {
-    return gImgs;
-}
-
-function getImgUrl(idx) {
-    return gImgs[idx].url;
 }
 
 function addTogMeme(txt, imgId) {
@@ -82,6 +75,14 @@ function addTogMeme(txt, imgId) {
     saveToStorage('gMeme', gMeme);
 }
 
+function getImages() {
+    return gImgs;
+}
+
+function getImgUrl(idx) {
+    return gImgs[idx].url;
+}
+
 function getMemeLine() {
     return gMeme.txts[gMeme.selectedTxtIdx];
 }
@@ -90,13 +91,15 @@ function getMemeImgIdx() {
     return gMeme.selectedImgId;
 }
 
-function setgMemeImg(imgId) {
-    gMeme.selectedImgId = imgId;
-    saveToStorage('gMeme', gMeme);
+function getgCurrPageIdx() {
+    return gCurrPageIdx;
 }
 
-function getgCurrPageIdx(){
-    return gCurrPageIdx;
+
+
+function onImgClick(idx) {
+    setgMemeImg(idx);
+    window.location.assign("editor.html");
 }
 
 function changeFontSize(elBtn) {
@@ -116,8 +119,11 @@ function changeFontDir(elBtn) {
 }
 
 function addTxtLine(elBtn) {
+    debugger
     if (gMeme.txts.length === 3) return;
-    gMeme.selectedTxtIdx++;
+    if (gMeme.selectedTxtIdx === 2) gMeme.selectedTxtIdx = 0
+    else if (gMeme.selectedTxtIdx === 0 && gMeme[gMeme.selectedTxtIdx].line === '') gMeme.selectedTxtIdx = 0;
+    else gMeme.selectedTxtIdx++;
     let lineIdx = gMeme.selectedTxtIdx;
     let newLine = {
         line: '',
@@ -165,6 +171,7 @@ function addSelectedStyle() {
 function onDeleteTxt() {
     if (gMeme.txts.length > 0) {
         gMeme.txts.splice(gMeme.selectedTxtIdx, 1);
+        debugger
         if (gMeme.selectedTxtIdx > 0) gMeme.selectedTxtIdx--;
         saveToStorage('gMeme', gMeme);
         renderCanvas();
@@ -172,8 +179,8 @@ function onDeleteTxt() {
     } else return
 }
 
-function onChangeFont(font){
-    if(gMeme.txts[gMeme.selectedTxtIdx].line==="")return;
+function onChangeFont(font) {
+    if (gMeme.txts[gMeme.selectedTxtIdx].line === "") return;
     gMeme.txts[gMeme.selectedTxtIdx].font = font;
     saveToStorage('gMeme', gMeme);
     renderCanvas();
@@ -198,22 +205,17 @@ function setCurrPageDiff(diff) {
     }
     let idx = gCurrPageIdx + diff;
     if (idx < 0) idx = 0;
-    else if (idx > 1 && !isEditorPage) idx  = 0;
-    else if(isEditorPage && idx>5)idx  = 0;
+    else if (idx > 1 && !isEditorPage) idx = 0;
+    else if (isEditorPage && idx > 5) idx = 0;
     gCurrPageIdx = idx;
     saveToStorage('pageIdx', gCurrPageIdx);
 }
 
 // share
-
-
-// on submit call to this function
 function uploadImg(elForm, ev) {
     ev.preventDefault();
-
     document.getElementById('imgData').value = canvas.toDataURL("image/jpeg");
 
-    // A function to be called if request succeeds
     function onSuccess(uploadedImgUrl) {
         uploadedImgUrl = encodeURIComponent(uploadedImgUrl)
         document.querySelector('.share-container').innerHTML = `
@@ -221,13 +223,11 @@ function uploadImg(elForm, ev) {
            Share   
         </a>`
     }
-
     doUploadImg(elForm, onSuccess);
 }
 
 function doUploadImg(elForm, onSuccess) {
     var formData = new FormData(elForm);
-
     fetch('http://ca-upload.com/here/upload.php', {
             method: 'POST',
             body: formData
@@ -235,14 +235,11 @@ function doUploadImg(elForm, onSuccess) {
         .then(function (response) {
             return response.text()
         })
-
         .then(onSuccess)
         .catch(function (error) {
             console.error(error)
         })
 }
-
-
 // save
 
 function downloadCanvas(elLink) {

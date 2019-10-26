@@ -24,30 +24,9 @@ function renderMemes() {
     $('div.images').html(strHTMLs);
 }
 
-function onImgClick(idx) {
-    setgMemeImg(idx);
-    window.location.assign("editor.html");
-}
-
-function setImgOnCanvas(idx) {
-    let img = new Image();
-    img.src = getImgUrl(idx - 1);
-    img.onload = () => {
-        gCtx.drawImage(img, 0, 0, gCanvas.width, gCanvas.height);
-        renderCanvas();
-    };
-}
-
-function onAddTxt(txt) {
-    addTogMeme(txt);
-    renderCanvas();
-}
-
 function renderCanvas() {
     let img = new Image();
     img.src = getImgUrl(getMemeImgIdx() - 1);
-    // gCanvas.width = img.width;
-    // gCanvas.height = img.height;
     gCtx.drawImage(img, 0, 0, gCanvas.width, gCanvas.height);
     let gMemeCopy = loadFromStorage('gMeme');
     let memeTxt = loadFromStorage('gMeme').txts;
@@ -97,6 +76,26 @@ function renderCanvas() {
     })
     
 }
+
+function setgMemeImg(imgId) {
+    gMeme.selectedImgId = imgId;
+    saveToStorage('gMeme', gMeme);
+}
+
+function setImgOnCanvas(idx) {
+    let img = new Image();
+    img.src = getImgUrl(idx - 1);
+    img.onload = () => {
+        gCtx.drawImage(img, 0, 0, gCanvas.width, gCanvas.height);
+        renderCanvas();
+    };
+}
+
+function onAddTxt(txt) {
+    addTogMeme(txt);
+    renderCanvas();
+}
+
 
 function clearTxtInput() {
     $('.txt-input').val('');
