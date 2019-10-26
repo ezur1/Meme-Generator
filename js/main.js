@@ -8,10 +8,18 @@ function renderMemes() {
     let images = getImages();
     let idxPage = getgCurrPageIdx();
     let strHTMLs = '';
-    let i = (idxPage===0)?0:17;
-    let length =(idxPage===0)?16:images.length;
-    for (i ; i <length; i++) {
-        strHTMLs+=`<img src="${images[i].url}" class="image-item" onclick="onImgClick(${images[i].id})">`;
+    let i = 1;
+    let length;
+    if ($('section').hasClass('editor-pics')) {
+        i = 4 * idxPage;
+        length = 4 * (idxPage + 1);
+    } else {
+        i = (idxPage === 0) ? 0 : 17;
+        length = (idxPage === 0) ? 16 : images.length;
+    }
+
+    for (i; i < length; i++) {
+        strHTMLs += `<img src="${images[i].url}" class="image-item" onclick="onImgClick(${images[i].id})">`;
     }
     $('div.images').html(strHTMLs);
 }
@@ -29,10 +37,12 @@ function setImgOnCanvas(idx) {
         renderCanvas();
     };
 }
+
 function onAddTxt(txt) {
     addTogMeme(txt);
     renderCanvas();
 }
+
 function renderCanvas() {
     let img = new Image();
     img.src = getImgUrl(getMemeImgIdx() - 1);
@@ -85,11 +95,13 @@ function renderCanvas() {
             }
         }
     })
+    
 }
 
 function clearTxtInput() {
     $('.txt-input').val('');
 }
+
 function toggleMenu() {
     var $elMainMenu = $('#mainMenu');
     $elMainMenu.toggleClass('open');

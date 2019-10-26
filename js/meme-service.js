@@ -3,7 +3,7 @@ let imagesPerPage = 16;
 let gImgs = [];
 var gCurrPageIdx = 0;
 let gMeme = loadFromStorage('gMeme');
-
+let isEditorPage = false;
 function init() {
     createImgs();
     renderMemes();
@@ -40,6 +40,7 @@ function canvasInit() {
         setCurrPageDiff(+this.dataset.nav)
         renderMemes();
     });
+    isEditorPage=true;
 }
 
 function createImgs() {
@@ -133,7 +134,6 @@ function addTxtLine(elBtn) {
 
 function switchBetweenTxts() {
     let numOfTxtLines = gMeme.txts.length;
-    // debuggers
     if (numOfTxtLines <= 1) {
         addSelectedStyle(0);
         renderCanvas();
@@ -173,6 +173,7 @@ function onDeleteTxt() {
 }
 
 function onChangeFont(font){
+    if(gMeme.txts[gMeme.selectedTxtIdx].line==="")return;
     gMeme.txts[gMeme.selectedTxtIdx].font = font;
     saveToStorage('gMeme', gMeme);
     renderCanvas();
@@ -195,10 +196,59 @@ function setCurrPageDiff(diff) {
         gCurrPageIdx = 0;
         return;
     }
-    debugger
     let idx = gCurrPageIdx + diff;
     if (idx < 0) idx = 0;
-    else if (idx > 1) idx  = 0;
+    else if (idx > 1 && !isEditorPage) idx  = 0;
+    else if(isEditorPage && idx>5)idx  = 0;
     gCurrPageIdx = idx;
     saveToStorage('pageIdx', gCurrPageIdx);
+}
+
+// share
+
+
+// on submit call to this function
+function uploadImg(elForm, ev) {
+    ev.preventDefault();
+
+    document.getElementById('imgData').value = canvas.toDataURL("image/jpeg");
+
+    // A function to be called if request succeeds
+    function onSuccess(uploadedImgUrl) {
+        uploadedImgUrl = encodeURIComponent(uploadedImgUrl)
+        document.querySelector('.share-container').innerHTML = `
+        <a class="w-inline-block social-share-btn btn fb" href="https://www.facebook.com/sharer/sharer.php?u=${uploadedImgUrl}&t=${uploadedImgUrl}" title="Share on Facebook" target="_blank" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=${uploadedImgUrl}&t=${uploadedImgUrl}'); return false;">
+           Share   
+        </a>`
+    }
+
+    doUploadImg(elForm, onSuccess);
+}
+
+function doUploadImg(elForm, onSuccess) {
+    var formData = new FormData(elForm);
+
+    fetch('http://ca-upload.com/here/upload.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(function (response) {
+            return response.text()
+        })
+
+        .then(onSuccess)
+        .catch(function (error) {
+            console.error(error)
+        })
+}
+
+
+// save
+
+function downloadCanvas(elLink) {
+    const data = gCanvas.toDataURL();
+    console.log(data);
+    elLink.href = data;
+    elLink.download = 'my-img.jpg';
+    console.log(elLink.download);
 }

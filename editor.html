@@ -5,7 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link href="https://fonts.googleapis.com/css?family=Amatic+SC:700|Fascinate+Inline|Staatliches&display=swap" rel="stylesheet">    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Amatic+SC:700|Fascinate+Inline|Staatliches&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+
     <title>Meme-Editor</title>
 </head>
 
@@ -36,47 +39,65 @@
             <canvas id="canvas" width="550" height="550" onclick="getMousePos(event)"></canvas>
             <div class="editor grid">
                 <input class="txt-input" type="text" name="memeTxt" oninput="onAddTxt(this.value)"
-                    placeholder="MeMe Text Here" />
+                    placeholder="MeMe Text Here!" />
                 <div class="txt-func flex space-between">
-                    <img src="icons/arrows.png" class="icon" onclick="switchBetweenTxts()">
-                    <img src="icons/add.png" class="icon" onclick="addTxtLine(this)">
-                    <img src="icons/trash.png" class="icon" onclick="onDeleteTxt()">
-                </div>
-                <div class="txt-editor flex space-around">
-                    <img src="icons/inc-font.png" class="icon plus" onclick="changeFontSize(this)">
-                    <img src="icons/dec-font.png" class="icon minus" onclick="changeFontSize(this)">
-                    <img src="icons/align-left.png" class="icon al" onclick="changeFontDir(this)">
-                    <img src="icons/align-center.png" class="icon ac" onclick="changeFontDir(this)">
-                    <img src="icons/align-right.png" class="icon ar" onclick="changeFontDir(this)">
+                    <img src="icons/scroll.png" class="icon" onclick="switchBetweenTxts()">
+                    <img src="icons/add1.png" class="icon" onclick="addTxtLine(this)">
+                    <img src="icons/bin.png" class="icon" onclick="onDeleteTxt()">
                 </div>
                 <div class="txt-style flex space-around">
+                    <img src="icons/inc-font.png" class="icon plus" onclick="changeFontSize(this)">
+                    <img src="icons/dec-font.png" class="icon minus" onclick="changeFontSize(this)">
+                    <img src="icons/a-l.png" class="icon al" onclick="changeFontDir(this)">
+                    <img src="icons/a-c.png" class="icon ac" onclick="changeFontDir(this)">
+                    <img src="icons/a-r.png" class="icon ar" onclick="changeFontDir(this)">
+                </div>
+                <div class="txt-editor flex space-around">
                     <select name="impact" onchange="onChangeFont(this.value)">
-                        <option value="arial">Arial</option>
-                        <option value="roboto">Roboto</option>
-                        <option value="courier">Courier</option>
+                        <option class="impact" value="impact">Impact</option>
+                        <option class="arial" value="arial">Arial</option>
+                        <option class="roboto" value="roboto">Roboto</option>
+                        <option class="courier" value="courier">Courier</option>
                     </select>
-                    <label for="strokeColor"><img src="icons/text-stroke.png" class="icon"></label>
-                    <input type="color" id="strokeColor" onchange="changeStrokeColor(this)" style="display: none"/>
-                    <label for="fontColor"><img src="icons/txt-color.png" class="icon"></label>
-                    <input type="color" id="fontColor" onchange="changeFontColor(this)" style="display: none"/>
-                    
+                    <label for="strokeColor"><img src="icons/color.png" class="icon"></label>
+                    <input type="color" id="strokeColor" onchange="changeStrokeColor(this)" style="display: none" />
+                    <label for="fontColor"><img src="icons/paint.png" class="icon"></label>
+                    <input type="color" id="fontColor" onchange="changeFontColor(this)" style="display: none" />
+                </div>
+                <div class="actions flex space-around">
+                    <a href="#" onclick="downloadCanvas(this)" download="">
+                        <img src="icons/diskette.png" class="icon save">
+                    </a>
+                    <form action="" method="POST" enctype="multipart/form-data" onsubmit="uploadImg(this, event)">
+                        <input name="img" id="imgData" type="hidden" />
+                        <button class="btn" type="submit"><img src="icons/facebook.png" class="icon share"></button>
+                        <div class="share-container"></div>
+                    </form>
                 </div>
             </div>
+
         </section>
-        <section class="container main-wrapper flex space-between">
-            <div class="first-panel">
-                <div class="images images-wrapper grid">
+        <section class="editor-pics container main-wrapper space-between">
+            <div class="">
+                <div class="images editor-pics images-wrapper grid">
                 </div>
             </div>
         </section>
 
-        <section class="pager main-pager container flex space-between">
+
+        <!-- <section class="pager main-pager container flex space-between">
             <button class="post-nav prev" data-nav="-1">Previous</button>
             <button class="post-nav next" data-nav="1">Next</button>
-        </section>
-
+        </section> -->
     </main>
-
+    <footer>
+        <section class="container">
+            <div class="logo">
+                MeMe Generator
+            </div>
+            <small>© 2019 MeMe-Generator.com - All Rights Reserved -</small>
+        </section>
+    </footer>
     <script src="js/util.js"></script>
     <script src="lib/jquery.min.js"></script>
     <script src="js/meme-service.js"></script>
