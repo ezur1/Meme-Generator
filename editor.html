@@ -36,7 +36,7 @@
 
     <main>
         <section class="editor-container container main-wrapper space-between flex">
-            <canvas id="canvas" width="550" height="550" onclick="getMousePos(event)"></canvas>
+            <canvas id="canvas" width="550" height="550" onclick="canvasClicked(event),getMousePos(event)"></canvas>
             <div class="editor grid">
                 <input class="txt-input" type="text" name="memeTxt" oninput="onAddTxt(this.value)"
                     placeholder="MeMe Text Here!" />
@@ -85,10 +85,10 @@
         </section>
 
 
-        <!-- <section class="pager main-pager container flex space-between">
+        <section class="pager main-pager container flex space-between">
             <button class="post-nav prev" data-nav="-1">Previous</button>
             <button class="post-nav next" data-nav="1">Next</button>
-        </section> -->
+        </section>
     </main>
     <footer>
         <section class="container">

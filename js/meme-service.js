@@ -1,5 +1,4 @@
 'use strict';
-let imagesPerPage = 16;
 let gImgs = [];
 var gCurrPageIdx = 0;
 let gMeme = loadFromStorage('gMeme');
@@ -19,7 +18,15 @@ function init() {
                 align: 'center',
                 color: 'white',
                 stroke: 'black',
-                font: 'Impact'
+                font: 'Impact',
+                xPos:{
+                    xStart:0,
+                    xEnd:0
+                },
+                yPos:{
+                    yStart:0,
+                    yEnd:0
+                }
             }]
         }
         saveToStorage('gMeme', gMeme);
@@ -58,7 +65,7 @@ function createImg(id) {
     };
 }
 
-function addTogMeme(txt, imgId) {
+function addTogMeme(txt) {
     if (gMeme.txts.length === 0) {
         let newLine = {
             line: '',
@@ -67,10 +74,19 @@ function addTogMeme(txt, imgId) {
             align: 'center',
             color: 'white',
             stroke: 'black',
-            font: 'Impact'
+            font: 'Impact',
+            xPos:{
+                xStart:0,
+                xEnd:0
+            },
+            yPos:{
+                yStart:0,
+                yEnd:0
+            }
         }
         gMeme.txts.push(newLine);
     }
+    gMeme = loadFromStorage('gMeme');
     gMeme.txts[gMeme.selectedTxtIdx].line = txt;
     saveToStorage('gMeme', gMeme);
 }
@@ -119,10 +135,9 @@ function changeFontDir(elBtn) {
 }
 
 function addTxtLine(elBtn) {
-    debugger
     if (gMeme.txts.length === 3) return;
     if (gMeme.selectedTxtIdx === 2) gMeme.selectedTxtIdx = 0
-    else if (gMeme.selectedTxtIdx === 0 && gMeme[gMeme.selectedTxtIdx].line === '') gMeme.selectedTxtIdx = 0;
+    // else if (gMeme.selectedTxtIdx === 0 && gMeme[gMeme.selectedTxtIdx].line === '') gMeme.selectedTxtIdx = 0;
     else gMeme.selectedTxtIdx++;
     let lineIdx = gMeme.selectedTxtIdx;
     let newLine = {
@@ -131,7 +146,16 @@ function addTxtLine(elBtn) {
         size: 50,
         align: 'center',
         color: 'white',
-        font: 'Impact'
+        font: 'Impact',
+        xPos:{
+            xStart:0,
+            xEnd:0
+        },
+        yPos:{
+            yStart:0,
+            yEnd:0
+        }
+        
     }
     gMeme.txts.push(newLine);
     saveToStorage('gMeme', gMeme);
@@ -160,7 +184,6 @@ function switchBetweenTxts() {
 }
 
 function addSelectedStyle() {
-
     gIsSelected = true;
     setTimeout(() => {
         gIsSelected = false;
@@ -171,7 +194,6 @@ function addSelectedStyle() {
 function onDeleteTxt() {
     if (gMeme.txts.length > 0) {
         gMeme.txts.splice(gMeme.selectedTxtIdx, 1);
-        debugger
         if (gMeme.selectedTxtIdx > 0) gMeme.selectedTxtIdx--;
         saveToStorage('gMeme', gMeme);
         renderCanvas();
@@ -249,3 +271,4 @@ function downloadCanvas(elLink) {
     elLink.download = 'my-img.jpg';
     console.log(elLink.download);
 }
+

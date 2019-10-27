@@ -29,52 +29,52 @@ function renderCanvas() {
     img.src = getImgUrl(getMemeImgIdx() - 1);
     gCtx.drawImage(img, 0, 0, gCanvas.width, gCanvas.height);
     let gMemeCopy = loadFromStorage('gMeme');
-    let memeTxt = loadFromStorage('gMeme').txts;
-    let xPos;
-    memeTxt.map(txt => {
+    let memeTxts = gMemeCopy.txts;
+    memeTxts.map((txt) => {
         gCtx.textAlign = txt.align;
         gCtx.fillStyle = txt.color;
         gCtx.strokeStyle = txt.stroke;
         gCtx.font = txt.size + 'px ' + txt.font;
         gCtx.lineWidth = 2;
-        if (txt.align === 'left') xPos = 10;
-        else if (txt.align === 'right') xPos = 540;
-        else xPos = gCanvas.width / 2;
+        setXpos(txt.align, txt);
         switch (txt.pos) {
             case 'top':
-                gCtx.fillText(txt.line, xPos, 70);
-                gCtx.strokeText(txt.line, xPos, 70);
+                txt.yPos.yStart = 70;
                 break;
             case 'middle':
-                gCtx.fillText(txt.line, xPos, gCanvas.height / 2);
-                gCtx.strokeText(txt.line, xPos, gCanvas.height / 2);
+                txt.yPos.yStart = gCanvas.height / 2;
                 break;
             case 'bottom':
-                gCtx.fillText(txt.line, xPos, 500);
-                gCtx.strokeText(txt.line, xPos, 500);
+                txt.yPos.yStart = 500;
                 break;
             default:
                 break;
         }
+        gCtx.fillText(txt.line, txt.xPos.xStart, txt.yPos.yStart);
+        gCtx.strokeText(txt.line, txt.xPos.xStart, txt.yPos.yStart);
+        let lineHeight = txt.size;
+        let textWidth = gCtx.measureText(txt.line).width;
+        txt.xPos.xStart = gCanvas.width / 2 - textWidth / 2;
+        txt.xPos.xEnd = textWidth;
+        txt.yPos.yEnd = lineHeight;
         if (gIsSelected && txt.line === gMemeCopy.txts[gMemeCopy.selectedTxtIdx].line) {
-            let lineHeight = txt.size;
-            let textWidth = gCtx.measureText(txt.line).width;
             switch (txt.pos) {
                 case 'top':
-                    gCtx.strokeRect(gCanvas.width / 2 - textWidth / 2, 30, textWidth, lineHeight);
+                    txt.yPos.yStart = 30;
                     break;
                 case 'middle':
-                    gCtx.strokeRect(gCanvas.width / 2 - textWidth / 2, 235, textWidth, lineHeight);
+                    txt.yPos.yStart = 235;
                     break;
                 case 'bottom':
-                    gCtx.strokeRect(gCanvas.width / 2 - textWidth / 2, 510 - lineHeight, textWidth, lineHeight);
+                    txt.yPos.yStart = 510 - lineHeight;
                     break;
                 default:
                     break;
             }
+            gCtx.strokeRect(txt.xPos.xStart, txt.yPos.yStart, txt.xPos.xEnd, txt.yPos.yEnd);
         }
     })
-    
+    saveToStorage('gMeme', gMemeCopy);
 }
 
 function setgMemeImg(imgId) {
@@ -92,6 +92,7 @@ function setImgOnCanvas(idx) {
 }
 
 function onAddTxt(txt) {
+    debugger
     addTogMeme(txt);
     renderCanvas();
 }
@@ -105,3 +106,31 @@ function toggleMenu() {
     var $elMainMenu = $('#mainMenu');
     $elMainMenu.toggleClass('open');
 }
+
+function setXpos(pos, txt) {
+    if (pos === 'left') txt.xPos.xStart = 10;
+    else if (pos === 'right') txt.xPos.xStart = 540;
+    else txt.xPos.xStart = gCanvas.width / 2;
+}
+
+
+function canvasClicked(ev) {
+    let txtIdx;
+    let gMemeCopy = loadFromStorage('gMeme');
+    let txt = gMemeCopy.txts.find((txt,idx) => {
+        txtIdx = idx;
+      return(
+        ev.offsetX > txt.xPos.xStart &&
+        ev.offsetX <  txt.xPos.xEnd +txt.xPos.xStart&&
+        ev.offsetY < txt.yPos.yStart &&
+        ev.offsetY > txt.yPos.yEnd
+      )
+    })
+    if(txt){
+        debugger
+        gMemeCopy.selectedTxtIdx = txtIdx;
+        saveToStorage('gMeme',gMemeCopy);
+        addSelectedStyle();
+        renderCanvas();
+    }
+  }
