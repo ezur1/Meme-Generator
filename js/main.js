@@ -92,7 +92,6 @@ function setImgOnCanvas(idx) {
 }
 
 function onAddTxt(txt) {
-    debugger
     addTogMeme(txt);
     renderCanvas();
 }
@@ -127,7 +126,6 @@ function canvasClicked(ev) {
       )
     })
     if(txt){
-        debugger
         gMemeCopy.selectedTxtIdx = txtIdx;
         saveToStorage('gMeme',gMemeCopy);
         addSelectedStyle();
